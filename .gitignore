@@ -1,0 +1,13 @@
+# Ignore local database credentials
+config/database.php
+
+# Ignore downloaded library archives
+tcpdf.zip
+
+# Ignore vendor directory for dependencies
+vendor/
+TCPDF/
+
+# Ignore common IDE directories
+.idea/
+.vscode/
