@@ -24,15 +24,21 @@ This is a web-based application for managing student internship (PKL) reports, b
 
 - PHP 8.0+
 - MySQL Server
+- Git
 - A web server (e.g., Apache, Nginx, or the PHP built-in server)
 
 ## Setup Instructions
 
-1.  **Clone the Repository:**
+1.  **Clone the Repository and Submodules:**
     ```bash
-    git clone <repository_url>
+    git clone --recurse-submodules <repository_url>
     cd <repository_directory>
     ```
+    If you have already cloned the repository without the submodules, you can fetch them using:
+    ```bash
+    git submodule update --init --recursive
+    ```
+    This will initialize and pull the **TCPDF** library required for PDF generation.
 
 2.  **Database Setup:**
     - Log in to your MySQL server.
@@ -53,9 +59,6 @@ This is a web-based application for managing student internship (PKL) reports, b
       ```
     - Open `config/database.php` and update the `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, and `DB_NAME` constants with your database details.
     - **Note:** The `.gitignore` file is configured to ignore `config/database.php` to prevent committing sensitive credentials.
-
-4.  **Dependencies:**
-    - The TCPDF library for PDF generation is included in the `TCPDF/` directory. No Composer installation is required.
 
 ## Running the Application
 
