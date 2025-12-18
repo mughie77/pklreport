@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../../../config/database.php';
+require_once '../../config/database.php';
 
 // Security check: ensure user is admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
