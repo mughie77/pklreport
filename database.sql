@@ -98,4 +98,5 @@ INSERT INTO `users` (`username`, `password`, `role`) VALUES
 -- Default settings
 INSERT INTO `settings` (`setting_key`, `setting_value`) VALUES
 ('school_name', 'SMKN 2 BONDOWOSO'),
-('academic_year', '2024/2025');
+('academic_year', '2024/2025'),
+('report_date_place', 'Bondowoso, 31 Desember 2024');

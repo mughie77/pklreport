@@ -1,42 +1,73 @@
 <?php
-session_start();
-// Redirect if not logged in or not an admin
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Arahkan jika tidak login atau bukan admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit();
 }
+
+require_once 'config/database.php';
+
+// Ambil statistik
+$student_count = $conn->query("SELECT COUNT(*) AS count FROM students")->fetch_assoc()['count'];
+$teacher_count = $conn->query("SELECT COUNT(*) AS count FROM teachers")->fetch_assoc()['count'];
+$location_count = $conn->query("SELECT COUNT(*) AS count FROM locations")->fetch_assoc()['count'];
+$internship_count = $conn->query("SELECT COUNT(*) AS count FROM internships")->fetch_assoc()['count'];
+
+
+$page_title = 'Dashboard Admin';
+require_once 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Admin Dashboard</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
-                    </li>
-                </ul>
+
+<div class="p-4 bg-light rounded-3 mb-4">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">Selamat Datang, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+        <p class="col-md-8 fs-4">Dari dashboard ini, Anda dapat mengelola fitur inti aplikasi Laporan PKL.</p>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow dashboard-card">
+            <div class="card-body">
+                <h5 class="card-title">Total Siswa</h5>
+                <p class="card-text fs-1"><?php echo $student_count; ?></p>
+                <a href="pages/admin/students.php" class="btn btn-primary">Kelola</a>
             </div>
         </div>
-    </nav>
-    <div class="container mt-4">
-        <h2>Welcome, Admin!</h2>
-        <p>From this dashboard, you can manage the application's core features.</p>
-        <div class="list-group">
-            <a href="pages/admin/students.php" class="list-group-item list-group-item-action">Manage Students</a>
-            <a href="pages/admin/teachers.php" class="list-group-item list-group-item-action">Manage Teachers</a>
-            <a href="pages/admin/locations.php" class="list-group-item list-group-item-action">Manage PKL Locations</a>
-            <a href="pages/admin/mapping.php" class="list-group-item list-group-item-action">Map Students to Internships</a>
-            <a href="pages/admin/settings.php" class="list-group-item list-group-item-action">Application Settings</a>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow dashboard-card">
+            <div class="card-body">
+                <h5 class="card-title">Total Guru</h5>
+                <p class="card-text fs-1"><?php echo $teacher_count; ?></p>
+                <a href="pages/admin/teachers.php" class="btn btn-primary">Kelola</a>
+            </div>
         </div>
     </div>
-</body>
-</html>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow dashboard-card">
+            <div class="card-body">
+                <h5 class="card-title">Total Lokasi</h5>
+                <p class="card-text fs-1"><?php echo $location_count; ?></p>
+                <a href="pages/admin/locations.php" class="btn btn-primary">Kelola</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow dashboard-card">
+            <div class="card-body">
+                <h5 class="card-title">Siswa Terpetakan</h5>
+                <p class="card-text fs-1"><?php echo $internship_count; ?></p>
+                <a href="pages/admin/mapping.php" class="btn btn-primary">Kelola</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+require_once 'includes/footer.php';
+?>

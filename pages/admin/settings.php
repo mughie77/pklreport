@@ -1,59 +1,51 @@
 <?php
-session_start();
 require_once '../../config/database.php';
 
-// Redirect if not logged in or not an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../../login.php');
-    exit();
-}
-
-// Fetch current settings
+// Logika untuk mengambil pengaturan
 $settings = [];
 $result = $conn->query("SELECT * FROM settings");
 while ($row = $result->fetch_assoc()) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
+
+$page_title = 'Pengaturan Aplikasi';
+require_once '../../includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Application Settings</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Application Settings</h1>
-            <a href="../../../admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
-        </div>
 
-        <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($_GET['success']); ?></div>
-        <?php endif; ?>
-        <?php if (isset($_GET['error'])): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
-        <?php endif; ?>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><?php echo $page_title; ?></h1>
+</div>
 
-        <div class="card">
-            <div class="card-header">
-                <h4>Edit Settings</h4>
-            </div>
-            <div class="card-body">
-                <form action="../../actions/admin/settings.php" method="post">
-                    <div class="mb-3">
-                        <label for="school_name" class="form-label">School Name</label>
-                        <input type="text" class="form-control" id="school_name" name="school_name" value="<?php echo htmlspecialchars($settings['school_name'] ?? ''); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="academic_year" class="form-label">Academic Year</label>
-                        <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?php echo htmlspecialchars($settings['academic_year'] ?? ''); ?>" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Settings</button>
-                </form>
-            </div>
-        </div>
+<?php if (isset($_GET['success'])): ?>
+    <div class="alert alert-success"><?php echo htmlspecialchars($_GET['success']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['error'])): ?>
+    <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
+<?php endif; ?>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h4>Ubah Pengaturan</h4>
     </div>
-</body>
-</html>
+    <div class="card-body">
+        <form action="../../actions/admin/settings.php" method="post">
+            <div class="mb-3">
+                <label for="school_name" class="form-label">Nama Sekolah</label>
+                <input type="text" class="form-control" id="school_name" name="school_name" value="<?php echo htmlspecialchars($settings['school_name'] ?? 'SMK Negeri 2 Bondowoso'); ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="academic_year" class="form-label">Tahun Pelajaran</label>
+                <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?php echo htmlspecialchars($settings['academic_year'] ?? ''); ?>" placeholder="Contoh: 2023/2024" required>
+            </div>
+             <div class="mb-3">
+                <label for="report_date_place" class="form-label">Tempat dan Tanggal Laporan</label>
+                <input type="text" class="form-control" id="report_date_place" name="report_date_place" value="<?php echo htmlspecialchars($settings['report_date_place'] ?? ''); ?>" placeholder="Contoh: Bondowoso, 31 Desember 2023" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+        </form>
+    </div>
+</div>
+
+<?php
+require_once '../../includes/footer.php';
+?>
