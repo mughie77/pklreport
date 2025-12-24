@@ -1,5 +1,13 @@
 <?php
+$page_title = 'Pemetaan Siswa PKL';
+require_once '../../includes/header.php';
 require_once '../../config/database.php';
+
+// Keamanan: Pastikan header.php dipanggil SEBELUM ini
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ' . BASE_URL . 'login.php');
+    exit();
+}
 
 // Logika untuk mengambil data yang diperlukan
 $students = $conn->query("SELECT * FROM students WHERE id NOT IN (SELECT student_id FROM internships) ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
@@ -13,9 +21,6 @@ $query = "SELECT i.id, s.name as student_name, t.name as teacher_name, l.name as
           JOIN locations l ON i.location_id = l.id
           ORDER BY s.name ASC";
 $mappings = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
-
-$page_title = 'Pemetaan Siswa PKL';
-require_once '../../includes/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">

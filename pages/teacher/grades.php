@@ -1,9 +1,11 @@
 <?php
+$page_title = 'Kelola Laporan Siswa';
+require_once '../../includes/header.php';
 require_once '../../config/database.php';
 
-// Keamanan & Inisialisasi
+// Keamanan & Inisialisasi: Pastikan header.php dipanggil SEBELUM ini
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: ../../../login.php');
+    header('Location: ' . BASE_URL . 'login.php');
     exit();
 }
 if (!isset($_GET['internship_id'])) {
@@ -24,7 +26,6 @@ if ($teacher_id_result->num_rows === 0) {
     exit();
 }
 $teacher_id = $teacher_id_result->fetch_assoc()['id'];
-
 
 // Verifikasi otorisasi guru
 $query_verify = "SELECT i.id, s.name as student_name, s.nisn, s.class, l.name as location_name
@@ -47,9 +48,6 @@ $stmt_report = $conn->prepare("SELECT * FROM reports WHERE internship_id = ?");
 $stmt_report->bind_param("i", $internship_id);
 $stmt_report->execute();
 $report = $stmt_report->get_result()->fetch_assoc();
-
-$page_title = 'Kelola Laporan Siswa';
-require_once '../../includes/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">

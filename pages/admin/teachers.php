@@ -1,5 +1,13 @@
 <?php
+$page_title = 'Kelola Guru';
+require_once '../../includes/header.php';
 require_once '../../config/database.php';
+
+// Keamanan: Pastikan header.php dipanggil SEBELUM ini
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ' . BASE_URL . 'login.php');
+    exit();
+}
 
 // Logika untuk mengambil dan mengelola data guru
 $query = "SELECT t.id, t.name, t.nip, u.username
@@ -19,9 +27,6 @@ if (isset($_GET['edit_id'])) {
     $stmt->execute();
     $edit_teacher = $stmt->get_result()->fetch_assoc();
 }
-
-$page_title = 'Kelola Guru';
-require_once '../../includes/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">

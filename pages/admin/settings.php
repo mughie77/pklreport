@@ -1,5 +1,13 @@
 <?php
+$page_title = 'Pengaturan Aplikasi';
+require_once '../../includes/header.php';
 require_once '../../config/database.php';
+
+// Keamanan: Pastikan header.php dipanggil SEBELUM ini
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ' . BASE_URL . 'login.php');
+    exit();
+}
 
 // Logika untuk mengambil pengaturan
 $settings = [];
@@ -7,9 +15,6 @@ $result = $conn->query("SELECT * FROM settings");
 while ($row = $result->fetch_assoc()) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
-
-$page_title = 'Pengaturan Aplikasi';
-require_once '../../includes/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">

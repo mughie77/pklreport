@@ -1,9 +1,11 @@
 <?php
+$page_title = 'Siswa Bimbingan';
+require_once '../../includes/header.php';
 require_once '../../config/database.php';
 
-// Keamanan & Inisialisasi
+// Keamanan & Inisialisasi: Pastikan header.php dipanggil SEBELUM ini
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: ../../../login.php');
+    header('Location: ' . BASE_URL . 'login.php');
     exit();
 }
 
@@ -29,10 +31,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $teacher_id);
 $stmt->execute();
 $assigned_students = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-
-$page_title = 'Siswa Bimbingan';
-require_once '../../includes/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
